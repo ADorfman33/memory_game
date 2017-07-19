@@ -22,25 +22,89 @@ var cards = [
   },
 ];
 var cardsInPlay = [];
+var cardElementsInPlay = [];
+var randFactor = 0;
 
 var checkForMatch = function() {
   if (cardsInPlay[0] === cardsInPlay[1]) {
-    console.log("You found a match!");
+    alert("You found a match!");
   } else {
-    console.log("Sorry, try again.");
+    alert("Sorry, try again.");
   }
+  flipCardsToBack();
+  cardElementsInPlay = [];
+  cardsInPlay = [];
 }
 
-var flipCard = function(cardId){
-  if(cardsInPlay.length === 2){
-    checkForMatch();
+var flipCardsToBack = function() {
+  for (var i=0 ; i<cardsInPlay.length ; i++){
+    cardElementsInPlay[i].setAttribute('src',"images/back.png");
   }
-  console.log("User flipped " + cards[cardId].rank);
+  cardElementsInPlay = [];
+  cardsInPlay = [];
+}
+
+var flipCard = function(){
+  var cardId = this.getAttribute('data-id');
+  this.setAttribute('src',cards[cardId].cardImage);
   cardsInPlay.push(cards[cardId].rank);
-
-  console.log(cards[cardId].cardImage);
-  console.log(cards[cardId].suit);
-
+  cardElementsInPlay.push(this);
+  if(cardsInPlay.length === 2){
+    setTimeout(checkForMatch , 100);
+  }
 }
 
-flipCard(3);
+var resetBoard = function(){
+  var board = document.querySelector('#game-board');
+  var images = document.querySelectorAll('.card');
+  var len = images.length;
+  for (var i = 0 ; i<len ; i++){
+    board.removeChild(images[len-1-i]);
+  }
+  cardElementsInPlay = [];
+  cardsInPlay = [];
+  createBoard();
+}
+
+var createBoard = function(){
+  randFactor = Math.floor(Math.random()*4);
+  for (var i = 0; i < cards.length; i++) {
+    var cardElement = document.createElement('img');
+    cardElement.setAttribute('src',"images/back.png");
+    cardElement.setAttribute('data-id',(i+randFactor)%4);
+    cardElement.className = "card";
+    cardElement.addEventListener('click',flipCard);
+    document.querySelector("#game-board").appendChild(cardElement);
+  }
+}
+
+var resetButton = document.querySelector('#resetButton');
+resetButton.addEventListener('click',flipCardsToBack);
+
+var resetBoardButton = document.querySelector('#resetBoardButton');
+resetBoardButton.addEventListener('click',resetBoard);
+
+
+// var createResetButton = function(){
+//   var navBar = document.querySelector('nav');
+//   var resetButton = document.createElement('a');
+//   resetButton.innerHTML = 'Reset';
+//   resetButton.className = 'game_buttons';
+//   resetButton.id = 'resetButton';
+//   resetButton.addEventListener('click',flipCardsToBack);
+//   navBar.appendChild(resetButton);
+// }
+
+// var createResetBoardButton = function(){
+//   var navBar = document.querySelector('nav');
+//   var resetBoardButton = document.createElement('a');
+//   resetBoardButton.innerHTML = 'Reset Board';
+//   resetBoardButton.className = 'game_buttons';
+//   resetBoardButton.id = 'resetBoardButton';
+//   resetBoardButton.addEventListener('click',resetBoard);
+//   navBar.appendChild(resetBoardButton);
+// }
+
+createBoard();
+// createResetButton();
+// createResetBoardButton();
