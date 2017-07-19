@@ -42,10 +42,10 @@ var cards = [
 ];
 var cardsInPlay = [];
 var cardElementsInPlay = [];
-var randFactor = 0;
+var randFactor = [];
 
 var checkForMatch = function() {
-  if (cardsInPlay[0] === cardsInPlay[1]) {
+  if (cardsInPlay[0].rank === cardsInPlay[1].rank && cardsInPlay[0].suit === cardsInPlay[1].suit) {
     alert("You found a match!");
   } else {
     alert("Sorry, try again.");
@@ -66,7 +66,7 @@ var flipCardsToBack = function() {
 var flipCard = function(){
   var cardId = this.getAttribute('data-id');
   this.setAttribute('src',cards[cardId].cardImage);
-  cardsInPlay.push(cards[cardId].rank);
+  cardsInPlay.push(cards[cardId]);
   cardElementsInPlay.push(this);
   if(cardsInPlay.length === 2){
     setTimeout(checkForMatch , 100);
@@ -85,12 +85,22 @@ var resetBoard = function(){
   createBoard();
 }
 
+var makeRandomOrder = function(){
+  for(var i=0 ; i<cards.length ; i++){
+    randFactor.push(i);
+  }
+  randFactor.sort(function(a,b){return 0.5 - Math.random()});
+  console.log(randFactor);
+}
+
 var createBoard = function(){
-  randFactor = Math.floor(Math.random()*cards.length);
+  makeRandomOrder();
+  // randFactor = Math.floor(Math.random()*cards.length);
   for (var i = 0; i < cards.length; i++) {
     var cardElement = document.createElement('img');
     cardElement.setAttribute('src',"images/back.png");
-    cardElement.setAttribute('data-id',(i+randFactor)%cards.length);
+    // cardElement.setAttribute('data-id',(i+randFactor)%cards.length);
+    cardElement.setAttribute('data-id',randFactor[i]);
     cardElement.className = "card";
     cardElement.addEventListener('click',flipCard);
     document.querySelector("#game-board").appendChild(cardElement);
