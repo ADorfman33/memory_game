@@ -19,7 +19,26 @@ var cards = [
     rank: "king",
     suit: "diamonds",
     cardImage: "images/king-of-diamonds.png"
+  },{
+    rank: "queen",
+    suit: "hearts",
+    cardImage: "images/queen-of-hearts.png"
   },
+  {
+    rank: "queen",
+    suit: "diamonds",
+    cardImage: "images/queen-of-diamonds.png"
+  },
+  {
+    rank: "king",
+    suit: "hearts",
+    cardImage: "images/king-of-hearts.png"
+  },
+  {
+    rank: "king",
+    suit: "diamonds",
+    cardImage: "images/king-of-diamonds.png"
+  }
 ];
 var cardsInPlay = [];
 var cardElementsInPlay = [];
@@ -67,11 +86,11 @@ var resetBoard = function(){
 }
 
 var createBoard = function(){
-  randFactor = Math.floor(Math.random()*4);
+  randFactor = Math.floor(Math.random()*cards.length);
   for (var i = 0; i < cards.length; i++) {
     var cardElement = document.createElement('img');
     cardElement.setAttribute('src',"images/back.png");
-    cardElement.setAttribute('data-id',(i+randFactor)%4);
+    cardElement.setAttribute('data-id',(i+randFactor)%cards.length);
     cardElement.className = "card";
     cardElement.addEventListener('click',flipCard);
     document.querySelector("#game-board").appendChild(cardElement);
