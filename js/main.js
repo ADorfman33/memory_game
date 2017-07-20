@@ -42,7 +42,14 @@ var cards = [
 ];
 var cardsInPlay = [];
 var cardElementsInPlay = [];
-var randFactor = [];
+
+var flipCardsToBack = function() {
+  for (var i=0 ; i<cardsInPlay.length ; i++){
+    cardElementsInPlay[i].setAttribute('src',"images/back.png");
+  }
+  cardElementsInPlay = [];
+  cardsInPlay = [];
+}
 
 var checkForMatch = function() {
   if (cardsInPlay[0].rank === cardsInPlay[1].rank && cardsInPlay[0].suit === cardsInPlay[1].suit) {
@@ -55,18 +62,12 @@ var checkForMatch = function() {
   cardsInPlay = [];
 }
 
-var flipCardsToBack = function() {
-  for (var i=0 ; i<cardsInPlay.length ; i++){
-    cardElementsInPlay[i].setAttribute('src',"images/back.png");
-  }
-  cardElementsInPlay = [];
-  cardsInPlay = [];
-}
-
 var flipCard = function(){
   var cardId = this.getAttribute('data-id');
   this.setAttribute('src',cards[cardId].cardImage);
-  cardsInPlay.push(cards[cardId]);
+  if(){
+    cardsInPlay.push(cards[cardId]);
+  }
   cardElementsInPlay.push(this);
   if(cardsInPlay.length === 2){
     setTimeout(checkForMatch , 100);
@@ -86,15 +87,17 @@ var resetBoard = function(){
 }
 
 var makeRandomOrder = function(){
+  randFactor = []
   for(var i=0 ; i<cards.length ; i++){
     randFactor.push(i);
   }
   randFactor.sort(function(a,b){return 0.5 - Math.random()});
   console.log(randFactor);
+  return randFactor;
 }
 
 var createBoard = function(){
-  makeRandomOrder();
+  randFactor = makeRandomOrder();
   // randFactor = Math.floor(Math.random()*cards.length);
   for (var i = 0; i < cards.length; i++) {
     var cardElement = document.createElement('img');
